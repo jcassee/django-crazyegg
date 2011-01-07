@@ -51,5 +51,6 @@ setup(
     ],
     platforms = ['any'],
     url = 'http://github.com/jcassee/django_crazyegg',
+    download_url = 'http://github.com/jcassee/django_crazyegg/archives/master',
     cmdclass = {'test': TestCommand},
 )
