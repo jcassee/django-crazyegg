@@ -50,7 +50,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     platforms = ['any'],
-    url = 'http://github.com/jcassee/django_crazyegg',
-    download_url = 'http://github.com/jcassee/django_crazyegg/archives/master',
+    url = 'http://github.com/jcassee/django-crazyegg',
+    download_url = 'http://github.com/jcassee/django-crazyegg/archives/master',
     cmdclass = {'test': TestCommand},
 )

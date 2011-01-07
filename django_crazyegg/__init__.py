@@ -76,7 +76,7 @@ Crazy Egg for their support.
 """
 
 __author__ = "Joost Cassee"
-__email__ = "<joost@cassee.net>"
-__version__ = "1.0.0"
+__email__ = "joost@cassee.net"
+__version__ = "1.0.1"
 __copyright__ = "Copyright (C) 2010 Joost Cassee"
 __license__ = "MIT License"
