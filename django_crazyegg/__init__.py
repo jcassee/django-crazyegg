@@ -54,9 +54,10 @@ closing ``</body>`` HTML tag::
     </body>
     </html>
 
-*Note:* Versions of django-crazyegg prior to 2.0.0 used asynchronous loading to
-allow the tag to be added to the HTML head section.  Unfortunately, that
-caused problems if you wanted to set user variables (see below).
+*Note:* Versions of django-crazyegg prior to 2.0.0 used asynchronous
+loading to allow the tag to be added to the HTML head section.
+Unfortunately, that caused problems if you wanted to set user variables
+(see below).
 
 Even if you only track clicks on a specific page, you can still insert
 the tracking tag in your base template.  Crazy Egg will only install the
