@@ -2,7 +2,7 @@
 Crazy Egg integration for Django
 ================================
 
-The django-crazyegg application integrate `Crazy Egg`_ heatmaps into a
+The django-crazyegg application integrates `Crazy Egg`_ heatmaps into a
 Django_ project.
 
 .. _`Crazy Egg`: http://www.crazyegg.com/

@@ -28,7 +28,7 @@ register = template.Library()
 @register.simple_tag
 def track_crazyegg():
     """
-    Grazy Egg visit tracking template tag. Renders Javascript code to track
+    Crazy Egg visit tracking template tag. Renders Javascript code to track
     a page visits.
 
     You must set CRAZYEGG_ACCOUNT_NUMBER = "XXXXXXXX" in your settings.py, else
