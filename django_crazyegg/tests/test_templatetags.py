@@ -5,8 +5,10 @@ Template tag tests.
 from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase
 
-from django_crazyegg.templatetags.crazyegg import track_crazyegg
+from django_crazyegg.templatetags.crazyegg import track_crazyegg, \
+        set_uservar, CrazyEggVariableError
 from django_crazyegg.tests.utils import TestSettingsManager
+
 
 class TrackCrazyEggTagTestCase(TestCase):
     """
@@ -24,9 +26,52 @@ class TrackCrazyEggTagTestCase(TestCase):
         self.assertEqual("", track_crazyegg())
 
     def test_wrong_id(self):
-        self.settings_manager.set(CRAZYEGG_ACCOUNT_NUMBER='wrong')
+        self.settings_manager.set(CRAZYEGG_ACCOUNT_NUMBER='1234567')
+        self.assertRaises(ImproperlyConfigured, track_crazyegg)
+        self.settings_manager.set(CRAZYEGG_ACCOUNT_NUMBER='123456789')
         self.assertRaises(ImproperlyConfigured, track_crazyegg)
 
     def test_rendering(self):
         self.settings_manager.set(CRAZYEGG_ACCOUNT_NUMBER='12345678')
-        self.assertTrue('/1234/5678.js' in track_crazyegg())
+        r = track_crazyegg()
+        self.assertTrue('/1234/5678.js' in r, r)
+
+
+class SetUserVarTagTestCase(TestCase):
+    """
+    Tests for the `set_uservar` template tag.
+    """
+
+    def test_normal(self):
+        r = set_uservar(2, 'test')
+        self.assertTrue("CE2.set(2,'test');" in r, r)
+
+    def test_string_int_var(self):
+        r = set_uservar('2', 'test')
+        self.assertTrue("CE2.set(2,'test');" in r, r)
+
+    def test_not_int_var(self):
+        self.assertRaises(CrazyEggVariableError, set_uservar, 't', 'test')
+
+    def test_low_var(self):
+        r = set_uservar(1, 'test')
+        self.assertTrue("CE2.set(1,'test');" in r, r)
+        self.assertRaises(CrazyEggVariableError, set_uservar, 0, 'test')
+
+    def test_high_var(self):
+        r = set_uservar(5, 'test')
+        self.assertTrue("CE2.set(5,'test');" in r, r)
+        self.assertRaises(CrazyEggVariableError, set_uservar, 6, 'test')
+
+    def test_long_value(self):
+        s1 = "X" * 100
+        s2 = "X" * 101
+        r = set_uservar(3, s1)
+        self.assertTrue("CE2.set(3,'%s');" % s1 in r, r)
+        self.assertRaises(CrazyEggVariableError, set_uservar, 3, s2)
+
+    def test_escaped_quote(self):
+        s = "test'test"
+        e = "test\\'test"
+        r = set_uservar(4, s)
+        self.assertTrue("CE2.set(4,'%s');" % e in r, r)
