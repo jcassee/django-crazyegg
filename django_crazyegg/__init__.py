@@ -79,6 +79,26 @@ multiple times::
 .. _`user variables`: https://www.crazyegg.com/help/Setting_Up_A_Page_to_Track/How_do_I_set_the_values_of_User_Var_1_User_Var_2_etc_in_the_confetti_and_overlay_views/
 
 
+Changelog
+---------
+
+1.0.0
+    Project created from code used in the `IPv6 Ready`_ project.
+
+1.0.1
+    Fixed links to the Github project pages in the ``setup.py`` script.
+
+2.0.0
+    Added the `set_uservar` template tag to set Crazy Egg user
+    variables.  These can be used to segment clicks on the confetti and
+    layout views.
+
+    Because variables can only be set after the tracking code has been
+    loaded, the tracking template tag has been reverted to the code that
+    Crazy Egg recommends and is no longer asynchronous.
+
+.. _`IPv6 Ready`: http://www.ipv6ready.nl/
+
 ------------------------------------------------------------------------
 
 django-crazyegg was written by Joost Cassee <joost@cassee.net>
