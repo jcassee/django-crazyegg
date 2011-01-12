@@ -21,8 +21,8 @@ def track_crazyegg():
     """
     Crazy Egg visit tracking template tag.
 
-    Renders Javascript code to track a page visits.  You must supply
-    your Crazy Egg account number (as a string) in the
+    Renders Javascript code to track page visits.  You must supply your
+    Crazy Egg account number (as a string) in the
     ``CRAZYEGG_ACCOUNT_NUMBER`` setting.
     """
     try:

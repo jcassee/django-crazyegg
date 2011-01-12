@@ -1,7 +1,3 @@
-"""
-Setup file for the IPv6-Ready project.
-"""
-
 from distutils.core import setup, Command
 
 import django_crazyegg

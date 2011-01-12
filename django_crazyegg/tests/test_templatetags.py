@@ -11,7 +11,7 @@ from django_crazyegg.tests.utils import TestSettingsManager
 
 class TrackCrazyEggTagTestCase(TestCase):
     """
-    Tests for the `track_pageview` template tag.
+    Tests for the `track_crazyegg` template tag.
     """
 
     def setUp(self):

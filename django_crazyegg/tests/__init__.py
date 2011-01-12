@@ -1,5 +1,5 @@
 """
-Tests for the crazyegg application.
+Tests for django-crazyegg.
 """
 
 from django_crazyegg.tests.test_templatetags import *
