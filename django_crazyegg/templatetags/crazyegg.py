@@ -6,7 +6,6 @@ import re
 
 from django import template
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 from django.template import Context, loader
 
 
@@ -26,12 +25,14 @@ def track_crazyegg():
     your Crazy Egg account number (as a string) in the
     ``CRAZYEGG_ACCOUNT_NUMBER`` setting.
     """
-    account_number = getattr(settings, 'CRAZYEGG_ACCOUNT_NUMBER', '')
-    if not account_number:
-        return ""
+    try:
+        account_number = settings.CRAZYEGG_ACCOUNT_NUMBER
+    except AttributeError:
+        raise CrazyEggException("CRAZYEGG_ACCOUNT_NUMBER setting not found")
+    account_number = str(account_number)
     if not ACCOUNT_RE.search(account_number):
-        raise ImproperlyConfigured("CRAZYEGG_ACCOUNT_NUMBER setting must be "
-                "a string containing an eight-digit number")
+        raise CrazyEggException("CRAZYEGG_ACCOUNT_NUMBER setting must be a "
+                "string containing an eight-digit number: %s" % account_number)
     vars = {
         'account_number_1': account_number[:4],
         'account_number_2': account_number[4:],
@@ -51,13 +52,13 @@ def set_uservar(variable, value):
     try:
         var_num = int(variable)
     except ValueError:
-        raise CrazyEggVariableError("not a numeric variable: %s" % variable)
+        raise CrazyEggException("not a numeric variable: %s" % variable)
     if not 1 <= var_num <= 5:
-        raise CrazyEggVariableError("variable must be between 1 and 5: %s"
+        raise CrazyEggException("variable must be between 1 and 5: %s"
                 % variable)
     val_str = str(value)
     if len(val_str) > 100:
-        raise CrazyEggVariableError(
+        raise CrazyEggException(
                 "value must be no longer than 100 character: %s" % value)
     vars = {
         'variable': var_num,
@@ -66,10 +67,11 @@ def set_uservar(variable, value):
     return SET_CODE % vars
 
 
-class CrazyEggVariableError(Exception):
+class CrazyEggException(Exception):
     """
-    Indicates an error with the Crazy Egg set-up. This exception is silenced
-    in Django templates.
+    Indicates an error with the Crazy Egg set-up.
+
+    This exception is silenced in Django templates.
     """
 
     silent_variable_failure = True
