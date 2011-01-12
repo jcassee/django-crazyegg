@@ -3,12 +3,9 @@ Setup file for the IPv6-Ready project.
 """
 
 from distutils.core import setup, Command
-import os
 
 import django_crazyegg
 
-
-os.environ['DJANGO_SETTINGS_MODULE'] = 'django_crazyegg.tests.settings'
 
 class TestCommand(Command):
     user_options = []
@@ -20,6 +17,8 @@ class TestCommand(Command):
         pass
 
     def run(self):
+        import os
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'django_crazyegg.tests.settings'
         from django_crazyegg.tests.utils import run_tests
         run_tests()
 
@@ -28,7 +27,7 @@ setup(
     name = 'django-crazyegg',
     version = django_crazyegg.__version__,
     license = django_crazyegg.__license__,
-    description = 'Crazy Egg heatmaps for Django projects.',
+    description = 'Crazy Egg heatmaps for Django projects',
     long_description = django_crazyegg.__doc__,
     author = django_crazyegg.__author__,
     author_email = django_crazyegg.__email__,

@@ -20,11 +20,11 @@ register = template.Library()
 @register.simple_tag
 def track_crazyegg():
     """
-    Crazy Egg visit tracking template tag. Renders Javascript code to track
-    a page visits.
+    Crazy Egg visit tracking template tag.
 
-    You must set CRAZYEGG_ACCOUNT_NUMBER = "XXXXXXXX" in your settings.py, else
-    this tag silently renders the empty string.
+    Renders Javascript code to track a page visits.  You must supply
+    your Crazy Egg account number (as a string) in the
+    ``CRAZYEGG_ACCOUNT_NUMBER`` setting.
     """
     account_number = getattr(settings, 'CRAZYEGG_ACCOUNT_NUMBER', '')
     if not account_number:
@@ -42,9 +42,11 @@ def track_crazyegg():
 @register.simple_tag
 def set_uservar(variable, value):
     """
-    Crazy Egg user variable setting template tag. Renders Javascript code to
-    set a user variable. The `variable` argument is a number between 1 and 5.
-    The `value` argument is a string of no more than 100 characters.
+    Crazy Egg user variable setting template tag.
+
+    Renders Javascript code to set a user variable.  The `variable`
+    argument is a number between 1 and 5.  The `value` argument is a
+    string of no more than 100 characters.
     """
     try:
         var_num = int(variable)

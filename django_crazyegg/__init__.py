@@ -44,18 +44,18 @@ setting::
 Usage
 =====
 
-The django-crazyegg application provides two template tags. One to track
+The django-crazyegg application provides two template tags: one to track
 visitor clicks, and one to register user variables. In order to use the
-tags in a template, first load the django-crazyegg them by adding
-``{% load crazyegg %}`` at the top.
+tags in a template, first load the django-crazyegg template library by
+adding ``{% load crazyegg %}`` at the top.
 
 
 Tracking visitor clicks
 -----------------------
 
 Crazy Egg uses Javascript to track every visitor click. The
-``track_crazyegg`` tag inserts the tracking code into the HTML page.
-The Crazy Egg web pages recommend adding the code directly before the
+``track_crazyegg`` tag inserts the tracking code in the HTML page. The
+Crazy Egg web pages recommend adding the code directly before the
 closing ``</body>`` HTML tag::
 
         ...
@@ -105,7 +105,7 @@ Changelog
     Fixed links to the Github project pages in the ``setup.py`` script.
 
 2.0.0
-    Added the `set_uservar` template tag to set Crazy Egg user
+    Added the ``set_uservar`` template tag to set Crazy Egg user
     variables.  These can be used to segment clicks on the confetti and
     layout views.
 

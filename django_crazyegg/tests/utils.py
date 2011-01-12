@@ -24,7 +24,6 @@ class TestSettingsManager(object):
 
     Automatically handles resyncing the DB if INSTALLED_APPS is
     modified.
-
     """
 
     NO_SETTING = ('!', None)

@@ -1,5 +1,5 @@
 """
-Django testing settings.
+django-crazyegg testing settings.
 """
 
 DATABASES = {
