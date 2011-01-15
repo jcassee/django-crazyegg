@@ -75,6 +75,33 @@ the tracking tag into your base template.  The code will only install
 the Javascript event handler on URLs that you have created snapshots
 for.
 
+Often you do not want to track clicks from your development or internal
+IP addresses.  For this reason you can set the ``CRAZYEGG_INTERNAL_IPS``
+to a list or tuple of addresses that the template tag will not be
+rendered on::
+
+    CRAZYEGG_INTERNAL_IPS = ['192.168.45.2', '192.168.45.5']
+
+If you already use the ``INTERNAL_IPS`` setting, you could set the
+Crazy Egg internal addreses to this value.  This will be the default
+from version 3.0.0 upwards.
+
+.. note::
+
+    The template tag can only access the visitor IP address if the
+    HTTP request is present in the template context as the ``request``
+    variable.  For this reason, the ``CRAZYEGG_INTERNAL_IPS`` settings
+    only works if you add this variable to the context yourself when you
+    render the template, or you use the ``RequestContext`` and add the
+    ``django.core.context_processors.request`` context processor to the
+    ``TEMPLATE_CONTEXT_PROCESSORS`` setting::
+
+        TEMPLATE_CONTEXT_PROCESSORS = [
+            ...
+            'django.core.context_processors.request',
+            ...
+        ]
+
 
 User variables
 --------------
@@ -98,11 +125,8 @@ multiple times::
 Changelog
 =========
 
-1.0.0
-    Project created from code used in the `IPv6 Ready`_ project.
-
-1.0.1
-    Fixed links to the Github project pages in the ``setup.py`` script.
+2.1.0
+    Added the ``CRAZYEGG_INTERNAL_IPS`` setting.
 
 2.0.0
     Added the ``set_uservar`` template tag to set Crazy Egg user
@@ -112,6 +136,12 @@ Changelog
     Because variables can only be set after the tracking code has been
     loaded, the tracking template tag has been reverted to the code that
     Crazy Egg recommends and is no longer asynchronous.
+
+1.0.1
+    Fixed links to the Github project pages in the ``setup.py`` script.
+
+1.0.0
+    Project created from code used in the `IPv6 Ready`_ project.
 
 .. _`IPv6 Ready`: http://www.ipv6ready.nl/
 
@@ -128,6 +158,6 @@ Crazy Egg for their support.
 
 __author__ = "Joost Cassee"
 __email__ = "joost@cassee.net"
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 __copyright__ = "Copyright (C) 2010-2011 Joost Cassee"
 __license__ = "MIT License"

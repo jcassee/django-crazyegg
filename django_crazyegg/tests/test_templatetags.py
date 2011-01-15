@@ -2,10 +2,12 @@
 Template tag tests.
 """
 
+from django.http import HttpRequest
+from django import template
 from django.test import TestCase
 
-from django_crazyegg.templatetags.crazyegg import track_crazyegg, \
-        set_uservar, CrazyEggException
+from django_crazyegg.templatetags.crazyegg import set_uservar, \
+        CrazyEggException
 from django_crazyegg.tests.utils import TestSettingsManager
 
 
@@ -20,19 +22,48 @@ class TrackCrazyEggTagTestCase(TestCase):
     def tearDown(self):
         self.settings_manager.revert()
 
+    def render_tag(self, context=None):
+        if context is None: context = {}
+        t = template.Template("{% load crazyegg %}{% track_crazyegg %}")
+        return t.render(template.Context(context))
+
     def test_no_id(self):
         self.settings_manager.delete('CRAZYEGG_ACCOUNT_NUMBER')
-        self.assertRaises(CrazyEggException, track_crazyegg)
+        self.assertRaises(CrazyEggException, self.render_tag)
 
     def test_wrong_id(self):
         self.settings_manager.set(CRAZYEGG_ACCOUNT_NUMBER='1234567')
-        self.assertRaises(CrazyEggException, track_crazyegg)
+        self.assertRaises(CrazyEggException, self.render_tag)
         self.settings_manager.set(CRAZYEGG_ACCOUNT_NUMBER='123456789')
-        self.assertRaises(CrazyEggException, track_crazyegg)
+        self.assertRaises(CrazyEggException, self.render_tag)
 
     def test_rendering(self):
         self.settings_manager.set(CRAZYEGG_ACCOUNT_NUMBER='12345678')
-        r = track_crazyegg()
+        r = self.render_tag()
+        self.assertTrue('/1234/5678.js' in r, r)
+
+    def test_render_internal_ip(self):
+        self.settings_manager.set(CRAZYEGG_ACCOUNT_NUMBER='12345678',
+                CRAZYEGG_INTERNAL_IPS=['1.1.1.1'])
+        req = HttpRequest()
+        req.META['REMOTE_ADDR'] = '1.1.1.1'
+        r = self.render_tag({'request': req})
+        self.assertEqual(r, "")
+
+    def test_render_internal_ip_forwarded(self):
+        self.settings_manager.set(CRAZYEGG_ACCOUNT_NUMBER='12345678',
+                CRAZYEGG_INTERNAL_IPS=['1.1.1.1'])
+        req = HttpRequest()
+        req.META['HTTP_X_FORWARDED_FOR'] = '1.1.1.1'
+        r = self.render_tag({'request': req})
+        self.assertEqual(r, "")
+
+    def test_render_not_internal_ip(self):
+        self.settings_manager.set(CRAZYEGG_ACCOUNT_NUMBER='12345678',
+                CRAZYEGG_INTERNAL_IPS=['1.1.1.1'])
+        req = HttpRequest()
+        req.META['REMOTE_ADDR'] = '2.2.2.2'
+        r = self.render_tag({'request': req})
         self.assertTrue('/1234/5678.js' in r, r)
 
 

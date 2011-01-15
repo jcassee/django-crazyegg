@@ -6,7 +6,7 @@ import re
 
 from django import template
 from django.conf import settings
-from django.template import Context, loader
+from django.template import Node, TemplateSyntaxError
 
 
 ACCOUNT_RE = re.compile(r'^\d{8}$')
@@ -16,8 +16,7 @@ SET_CODE = u"<script type=\"text/javascript\">CE2.set(%(variable)d,'%(value)s');
 
 register = template.Library()
 
-@register.simple_tag
-def track_crazyegg():
+def track_crazyegg(parser, token):
     """
     Crazy Egg visit tracking template tag.
 
@@ -25,19 +24,41 @@ def track_crazyegg():
     Crazy Egg account number (as a string) in the
     ``CRAZYEGG_ACCOUNT_NUMBER`` setting.
     """
-    try:
-        account_number = settings.CRAZYEGG_ACCOUNT_NUMBER
-    except AttributeError:
-        raise CrazyEggException("CRAZYEGG_ACCOUNT_NUMBER setting not found")
-    account_number = str(account_number)
-    if not ACCOUNT_RE.search(account_number):
-        raise CrazyEggException("CRAZYEGG_ACCOUNT_NUMBER setting must be a "
-                "string containing an eight-digit number: %s" % account_number)
-    vars = {
-        'account_number_1': account_number[:4],
-        'account_number_2': account_number[4:],
-    }
-    return TRACK_CODE % vars
+    bits = token.split_contents()
+    if len(bits) > 1:
+        raise TemplateSyntaxError("'%s' takes no arguments" % bits[0])
+    return TrackCrazyEggNode()
+
+class TrackCrazyEggNode(Node):
+    def __init__(self):
+        try:
+            account_number = settings.CRAZYEGG_ACCOUNT_NUMBER
+        except AttributeError:
+            raise CrazyEggException(
+                    "CRAZYEGG_ACCOUNT_NUMBER setting not found")
+        self.account_number = str(account_number)
+        if not ACCOUNT_RE.search(self.account_number):
+            raise CrazyEggException("CRAZYEGG_ACCOUNT_NUMBER setting must be "
+                    "a string containing an eight-digit number: %s"
+                        % account_number)
+        self.internal_ips = getattr(settings, 'CRAZYEGG_INTERNAL_IPS', ())
+
+    def render(self, context):
+        try:
+            request = context['request']
+            remote_ip = request.META.get('HTTP_X_FORWARDED_FOR',
+                    request.META.get('REMOTE_ADDR', ''))
+            if remote_ip in self.internal_ips:
+                return ""
+        except KeyError:
+            pass
+        vars = {
+            'account_number_1': self.account_number[:4],
+            'account_number_2': self.account_number[4:],
+        }
+        return TRACK_CODE % vars
+
+register.tag('track_crazyegg', track_crazyegg)
 
 
 @register.simple_tag
