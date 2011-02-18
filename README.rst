@@ -1,6 +1,8 @@
 django-crazyegg
 ---------------
 
+**Not developed anymore.** Please use django-analytical_.
+
 The django-crazyegg application integrates `Crazy Egg`_ heatmaps into a
 Django_ project.
 
@@ -17,6 +19,7 @@ is licensed under the MIT License (see LICENSE.txt).
 Development was made possible by `Bateau Knowledge`_.  Thanks go to
 Crazy Egg for their support, and to GitHub for hosting the project.
 
+.. _django-analytical: https://packages.python.org/django-analytical
 .. _`Crazy Egg`: http://www.crazyegg.com
 .. _Django: http://www.djangoproject.com
 .. _GitHub: http://www.github.com/jcassee/django-crazyegg

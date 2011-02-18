@@ -125,6 +125,9 @@ multiple times::
 Changelog
 =========
 
+2.1.1
+    Stopped development.  Added Crazy Egg module to django_analytical_.
+
 2.1.0
     Added the ``CRAZYEGG_INTERNAL_IPS`` setting.
 
@@ -143,6 +146,7 @@ Changelog
 1.0.0
     Project created from code used in the `IPv6 Ready`_ project.
 
+.. _django-analytical: http://packages.python.org/django-analytical
 .. _`IPv6 Ready`: http://www.ipv6ready.nl/
 
 ------------------------------------------------------------------------
@@ -158,6 +162,6 @@ Crazy Egg for their support.
 
 __author__ = "Joost Cassee"
 __email__ = "joost@cassee.net"
-__version__ = "2.1.0"
+__version__ = "2.1.1"
 __copyright__ = "Copyright (C) 2010-2011 Joost Cassee"
 __license__ = "MIT License"
